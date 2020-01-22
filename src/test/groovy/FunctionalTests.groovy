@@ -109,4 +109,35 @@ class FunctionalTests extends Specification {
 
     }
 
+    def "changing using block functionality functions as expected"() {
+        expect:
+        UndoablePojo proxy = PojoWrapper.wrap(UndoablePojo.class)
+
+        proxy.start()
+        proxy.setFieldOne("firstFieldValue1")
+        proxy.setFieldTwo("secondFieldValue1")
+        proxy.finish()
+
+        proxy.useBlocks(false)
+        proxy.setFieldOne("firstFieldValue2")
+        proxy.setFieldTwo("firstFieldValue2")
+        proxy.undo()
+        proxy.undo()
+
+        proxy.fieldOne == "firstFieldValue1"
+        proxy.fieldTwo == "secondFieldValue1"
+
+        proxy.useBlocks(true)
+        proxy.start()
+        proxy.setFieldOne("firstFieldValue3")
+        proxy.setFieldTwo("secondFieldValue3")
+        proxy.finish()
+
+        proxy.undo()
+
+        proxy.fieldOne == "firstFieldValue1"
+        proxy.fieldTwo == "secondFieldValue1"
+
+    }
+
 }

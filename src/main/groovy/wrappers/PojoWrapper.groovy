@@ -25,7 +25,11 @@ class PojoWrapper {
                             if (!clazz.cast(obj).isInProgress()) {
                                 throw new IllegalStateException("Did you forget to call start() before setting values?")
                             }
-                            (clazz.cast(obj).tuples << new Tuple2(propertyDescriptor.getWriteMethod(), propertyDescriptor.getReadMethod().invoke(obj)))
+                            if (clazz.cast(obj).isUsingBlocks()) {
+                                clazz.cast(obj).tuples << new Tuple2(propertyDescriptor.getWriteMethod(), propertyDescriptor.getReadMethod().invoke(obj))
+                            } else {
+                                clazz.cast(obj).stack.push([new Tuple2(propertyDescriptor.getWriteMethod(), propertyDescriptor.getReadMethod().invoke(obj))])
+                            }
                         }
                     }
                 }
