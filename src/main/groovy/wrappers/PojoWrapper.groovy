@@ -21,8 +21,8 @@ class PojoWrapper {
             if (!method.isSynthetic()) {
                 for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(clazz).getPropertyDescriptors()) {
                     if (propertyDescriptor.getWriteMethod() == method) {
-                        if (!clazz.cast(obj).freeze) {
-                            if (!clazz.cast(obj).inProgress) {
+                        if (!clazz.cast(obj).isFrozen()) {
+                            if (!clazz.cast(obj).isInProgress()) {
                                 throw new IllegalStateException("Did you forget to call start() before setting values?")
                             }
                             (clazz.cast(obj).tuples << new Tuple2(propertyDescriptor.getWriteMethod(), propertyDescriptor.getReadMethod().invoke(obj)))

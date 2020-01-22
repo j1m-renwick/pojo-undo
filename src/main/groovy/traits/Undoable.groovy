@@ -4,10 +4,10 @@ import java.lang.reflect.Method
 
 trait Undoable {
 
-    Stack<List<Tuple2<Method, Object>>> stack = new Stack<>()
+    private Stack<List<Tuple2<Method, Object>>> stack = new Stack<>()
     List<Tuple2<Method, Object>> tuples
-    boolean freeze
-    boolean inProgress
+    private boolean freeze
+    private boolean inProgress
 
     void undo() {
         freeze = true
@@ -25,6 +25,14 @@ trait Undoable {
         freeze = false
     }
 
+    boolean isFrozen() {
+        return this.freeze
+    }
+
+    boolean isInProgress() {
+        return this.inProgress
+    }
+
     void start() {
         freeze = true
         if (inProgress) {
@@ -35,7 +43,7 @@ trait Undoable {
         freeze = false
     }
 
-    // TODO add a check for calling finish multiple times()?
+    // TODO add a check for calling finish multiple times()?  Don't push empty tuple list!
     void finish() {
         freeze = true
         inProgress = false
