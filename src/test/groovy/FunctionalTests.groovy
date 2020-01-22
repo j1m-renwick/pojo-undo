@@ -88,4 +88,25 @@ class FunctionalTests extends Specification {
         thrown(IllegalStateException.class)
     }
 
+    def "multiple proxies do not interfere with each other"() {
+        given:
+        UndoablePojo proxyOne = PojoWrapper.wrap(UndoablePojo.class)
+        UndoablePojo proxyTwo = PojoWrapper.wrap(UndoablePojo.class)
+
+        when:
+        proxyOne.start()
+        proxyTwo.start()
+        proxyOne.setFieldOne("proxyOneValue")
+        proxyTwo.setFieldOne("proxyTwoValue")
+        proxyOne.finish()
+        proxyTwo.finish()
+
+        proxyOne.undo()
+
+        then:
+        proxyOne.fieldOne == null
+        proxyTwo.fieldOne == "proxyTwoValue"
+
+    }
+
 }

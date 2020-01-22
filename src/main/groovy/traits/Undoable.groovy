@@ -34,17 +34,19 @@ trait Undoable {
     }
 
     void start() {
-        freeze = true
         if (inProgress) {
             throw new IllegalStateException("block is already in progress - you must first call finish() before calling start()")
         }
+        freeze = true
         inProgress = true
         tuples = []
         freeze = false
     }
 
-    // TODO add a check for calling finish multiple times()?  Don't push empty tuple list!
     void finish() {
+        if (!inProgress) {
+            throw new IllegalStateException("block is not in progress - you must first call start()")
+        }
         freeze = true
         inProgress = false
         stack.push(tuples)
