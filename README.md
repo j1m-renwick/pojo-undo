@@ -1,6 +1,6 @@
 # Pojo Undo
 
-This library uses CGLIB to proxy POJO classes, giving them the ability to undo the setting of one or more variables in the same order that they have been set.  
+This library uses CGLIB to proxy POJO classes, giving them the ability to undo the setting of one or more variables in the reverse order that they have been set.  
 
 ### Usage
 
